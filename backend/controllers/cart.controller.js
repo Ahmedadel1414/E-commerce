@@ -42,6 +42,7 @@ export const removeAllFromCart = async (req, res) => {
   try {
     const { productId } = req.body;
     const user = req.user;
+
     if (!productId) {
       user.cartItems = [];
     } else {
@@ -60,7 +61,7 @@ export const updateQuantity = async (req, res) => {
     const { id: productId } = req.params;
     const { quantity } = req.body;
     const user = req.user;
-    const existingItem = user.cartItem.find((item) => item.id === productId);
+    const existingItem = user.cartItems.find((item) => item.id === productId);
 
     if (existingItem) {
       if (quantity === 0) {
@@ -68,9 +69,11 @@ export const updateQuantity = async (req, res) => {
         await user.save();
         return res.json(user.cartItem);
       }
+      
       existingItem.quantity = quantity;
       await user.save();
-      return res.json(user.cartItem);
+      res.json(user.cartItem);
+
     } else {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -79,3 +82,4 @@ export const updateQuantity = async (req, res) => {
     res.status(500).json({ message: "server error", error: error.message });
   }
 };
+
