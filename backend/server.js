@@ -17,7 +17,6 @@ const app = express();
 
 const PORT = process.env.PORT || 5050;
 
-const __dirname = path.resolve()
 
 app.use(express.json({ limit: "10mb" })); // allows you to parse the body of the request
 app.use(cookieParser()); // allows you to parse the cookies
@@ -29,12 +28,6 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
-if (process.env.NODE_ENV === "production" ) {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  })
-}
 
 app.listen(PORT, () => {
   console.log("server is running on port http://localhost:" + PORT);
